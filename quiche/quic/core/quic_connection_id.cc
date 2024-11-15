@@ -50,7 +50,11 @@ QuicConnectionId::QuicConnectionId() : QuicConnectionId(nullptr, 0) {
   static_assert(offsetof(QuicConnectionId, padding_) ==
                     offsetof(QuicConnectionId, length_),
                 "bad offset");
+#if defined(__CHERI_PURE_CAPABILITY__)
+  static_assert(sizeof(QuicConnectionId) <= 48, "bad size");
+#else   // !__CHERI_PURE_CAPABILITY__
   static_assert(sizeof(QuicConnectionId) <= 24, "bad size");
+#endif  // !__CHERI_PURE_CAPABILITY__
 }
 
 QuicConnectionId::QuicConnectionId(const char* data, uint8_t length) {
