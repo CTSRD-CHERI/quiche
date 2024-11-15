@@ -78,7 +78,11 @@ class QUICHE_EXPORT QuicOneBlockArena {
 
 // QuicConnections currently use around 0.5kB of polymorphic types which would
 // ordinarily be on the heap. Instead, store them inline in an arena.
+#if defined(__CHERI_PURE_CAPABILITY__)
+using QuicConnectionArena = QuicOneBlockArena<700>;
+#else   // !__CHERI_PURE_CAPABILITY__
 using QuicConnectionArena = QuicOneBlockArena<320>;
+#endif  // !__CHERI_PURE_CAPABILITY__
 
 }  // namespace quic
 
