@@ -142,8 +142,13 @@ class QUICHE_NO_EXPORT QuicInlinedStringView {
   alignas(ViewRep) char data_[kSize];
 };
 
+#if defined(__CHERI_PURE_CAPABILITY__)
+static_assert(std::is_trivially_destructible_v<QuicInlinedStringView<32>>);
+static_assert(std::is_trivially_copyable_v<QuicInlinedStringView<32>>);
+#else   // !__CHERI_PURE_CAPABILITY__
 static_assert(std::is_trivially_destructible_v<QuicInlinedStringView<16>>);
 static_assert(std::is_trivially_copyable_v<QuicInlinedStringView<16>>);
+#endif  // !__CHERI_PURE_CAPABILITY__
 
 }  // namespace quic
 

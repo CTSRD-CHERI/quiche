@@ -178,7 +178,11 @@ struct QUICHE_EXPORT QuicPacketHeader {
 };
 static_assert(offsetof(struct QuicPacketHeader, version) <= 64,
               "all short header fields must fit in a single cacheline");
+#if defined(__CHERI_PURE_CAPABILITY__)
+static_assert(sizeof(QuicPacketHeader) <= 192,
+#else   // !__CHERI_PURE_CAPABILITY__
 static_assert(sizeof(QuicPacketHeader) <= 128,
+#endif  // !__CHERI_PURE_CAPABILITY__
               "QuicPacketHeader is too large.");
 
 struct QUICHE_EXPORT QuicPublicResetPacket {
