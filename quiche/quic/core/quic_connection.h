@@ -1725,7 +1725,11 @@ class QUICHE_EXPORT QuicConnection
     // deprecated.
     QuicConnectionId destination_connection_id;
   };
+#if defined(__CHERI_PURE_CAPABILITY__)
+  static_assert(offsetof(ReceivedPacketInfo, received_bytes_counted) <= 256);
+#else   // !__CHERI_PURE_CAPABILITY__
   static_assert(offsetof(ReceivedPacketInfo, received_bytes_counted) <= 192);
+#endif  // !__CHERI_PURE_CAPABILITY__
 
   QUICHE_EXPORT friend std::ostream& operator<<(
       std::ostream& os, const QuicConnection::ReceivedPacketInfo& info);
