@@ -27,7 +27,11 @@ class QuicStreamSendBufferPeer;
 
 class QuicDataWriter;
 
+#if defined(__CHERI_PURE_CAPABILITY__)
+constexpr size_t kSendBufferMaxInlinedSize = 31;
+#else   // !__CHERI_PURE_CAPABILITY__
 constexpr size_t kSendBufferMaxInlinedSize = 15;
+#endif  // !__CHERI_PURE_CAPABILITY__
 
 // BufferedSliceInlining is an entry in the send buffer.  It contains a pointer
 // to the buffered data (or data itself, if it is inlined), the size of the data
